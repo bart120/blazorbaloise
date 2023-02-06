@@ -1,0 +1,37 @@
+﻿@page "/brands"
+@inject HttpClient http
+
+<PageTitle>Liste des marques</PageTitle>
+
+
+<h3>Marques</h3>
+
+@if (brands == null)
+{
+    <p><em>Chargement...</em></p>
+}
+else
+{
+    <div class="row">
+        @foreach (var brand in brands)
+        {
+            <div class="col-3">
+                <div class="card" style="width: 18rem;">
+                    <img src="/images/@brand.Image" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">@brand.Name</h5>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@code {
+    private List<Brand>? brands;
+
+    protected override async Task OnInitializedAsync()
+    {
+        brands = await http.GetFromJsonAsync<List<Brand>>("brands");
+    }
+}
