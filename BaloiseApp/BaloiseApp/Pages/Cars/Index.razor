@@ -1,0 +1,37 @@
+﻿@page "/cars/list"
+@using BaloiseApp.Services;
+@inject CarsService serv;
+
+<h3>Les voitures</h3>
+@if (cars != null)
+{
+    <table class="table table-dark table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Modèle</th>
+                <th scope="col">Prix</th>
+                <th scope="col">Date de circulation</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var car in cars)
+            {
+                <tr>
+                    <th scope="row">@car.Model</th>
+                    <td>@car.Price</td>
+                    <td>@car.DateOfCirculation.ToShortDateString()</td>
+                    <td><NavLink href="@($"cars/detail/{car.ID}?nom={car.Model}")">Voir</NavLink></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<Car>? cars;
+    protected override async Task OnInitializedAsync()
+    {
+        this.cars = await serv.getAllAsync();
+    }
+}

@@ -1,4 +1,5 @@
 using BaloiseApp;
+using BaloiseApp.Services;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration.Memory;
@@ -18,5 +19,6 @@ builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(@"https://formation.inow.fr/demo/api/v1/") });
+builder.Services.AddScoped<CarsService>();
 
 await builder.Build().RunAsync();

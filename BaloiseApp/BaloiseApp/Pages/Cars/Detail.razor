@@ -1,0 +1,45 @@
+﻿@*@page "/cars/detail/{id:int}/{*pageRoute}"*@
+@page "/cars/detail/{id:int}"
+
+@using BaloiseApp.Services;
+
+@inject IJSRuntime jsRuntime
+@inject CarsService serv
+@inject NavigationManager nav
+
+<h3>@car?.Model</h3>
+
+<p>Prix: @car?.Price €</p>
+
+<div>
+    <button class="btn btn-primary" @onclick="back">Revenir</button>
+</div>
+
+@code {
+    private Car? car;
+
+    [Parameter]
+    public int Id { get; set; }
+
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "nom")]
+    public string? Name { get; set; }
+
+    /*[Parameter]
+    public string? PageRoute { get; set; }*/
+
+
+    private async Task back()
+    {
+        nav.NavigateTo("/cars/list");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        //await jsRuntime.InvokeVoidAsync("alert", $"L'ID est: {id}");
+        //bool test = await jsRuntime.InvokeAsync<bool>("confirm", "OK ?");
+        Console.WriteLine(Name);
+        //alert("test")
+        this.car = await serv.getByIdAsync(Id);
+    }
+}
