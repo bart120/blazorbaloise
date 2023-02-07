@@ -1,6 +1,6 @@
 ﻿@page "/cars/list"
-@using BaloiseApp.Services;
-@inject CarsService serv;
+@using Microsoft.AspNetCore.Components.Routing
+@inject CarsService serv
 
 <h3>Les voitures</h3>
 @if (cars != null)

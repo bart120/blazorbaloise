@@ -1,11 +1,11 @@
 ﻿@*@page "/cars/detail/{id:int}/{*pageRoute}"*@
 @page "/cars/detail/{id:int}"
+@using Microsoft.JSInterop;
 
-@using BaloiseApp.Services;
 
 @inject IJSRuntime jsRuntime
-@inject CarsService serv
 @inject NavigationManager nav
+@inject CarsService serv
 
 <h3>@car?.Model</h3>
 

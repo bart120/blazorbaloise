@@ -1,7 +1,8 @@
-﻿using BaloiseApp.Models;
+﻿
+using ServicesLibrary.Models;
 using System.Net.Http.Json;
 
-namespace BaloiseApp.Services
+namespace ServicesLibrary.Services
 {
     public class CarsService
     {

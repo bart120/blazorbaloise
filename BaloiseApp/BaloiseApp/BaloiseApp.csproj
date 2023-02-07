@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -17,6 +17,18 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.2" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CarsLibrary\CarsLibrary.csproj" />
+    <ProjectReference Include="..\LazyLibrary\LazyLibrary.csproj" />
+    <ProjectReference Include="..\MyComponentsLibrary\MyComponentsLibrary.csproj" />
+    <ProjectReference Include="..\ServicesLibrary\ServicesLibrary.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <BlazorWebAssemblyLazyLoad Include="LazyLibrary.dll" />
+    <BlazorWebAssemblyLazyLoad Include="CarsLibrary.dll" />
   </ItemGroup>
 
 </Project>

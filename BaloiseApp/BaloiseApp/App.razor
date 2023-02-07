@@ -1,4 +1,10 @@
-﻿<Router AppAssembly="@typeof(App).Assembly">
+﻿@using System.Reflection;
+@using LazyLibrary;
+@using Microsoft.AspNetCore.Components.WebAssembly.Services;
+
+@inject LazyAssemblyLoader AssemblyLoader
+
+<Router AppAssembly="@typeof(App).Assembly" AdditionalAssemblies="@assemblies" OnNavigateAsync="@OnNavigateAsync">
     <Found Context="routeData">
         <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
         <FocusOnNavigate RouteData="@routeData" Selector="h1" />
@@ -10,3 +16,24 @@
         </LayoutView>
     </NotFound>
 </Router>
+
+@code{
+    private List<Assembly> assemblies = new();
+
+    private async Task OnNavigateAsync(NavigationContext context)
+    {
+        if (context.Path == "lazy")
+        {
+            var ass = await AssemblyLoader.LoadAssembliesAsync(new[] { "LazyLibrary.dll"});
+            assemblies.AddRange(ass);
+        }
+
+        if (context.Path.Contains("cars"))
+        {
+            var ass = await AssemblyLoader.LoadAssembliesAsync(new[] { "CarsLibrary.dll", });
+            assemblies.AddRange(ass);
+        }
+    }
+
+
+}
