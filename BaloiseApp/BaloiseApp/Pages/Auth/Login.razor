@@ -1,28 +1,30 @@
 ﻿@page "/login"
 
 @using Microsoft.AspNetCore.Components.Forms
+@using BaloiseApp.Components
 
 <h3>Authentification</h3>
-
-<EditForm OnValidSubmit="@submit" Model="@model">
+<EditForm OnValidSubmit="@submit" Model="@model" novalidate>
     <DataAnnotationsValidator />
 
-   <div class="mb-3 row">
+  @* <div class="mb-3 row">
         <label for="staticEmail" class="col-sm-2 col-form-label">Email</label>
         <div class="col-sm-10">
             <InputText @bind-Value="model.Email" class="form-control" id="staticEmail" />
             <ValidationMessage For="@(() => model.Email)" />
         </div>
-    </div>
+    </div>*@
+
+    <InputMail Label="Email" @bind-Value="model.Email" style="background-color: lightblue" placeholder="Saisir votre login" />
 
     <div class="mb-3 row">
         <label for="staticPassword" class="col-sm-2 col-form-label">Password</label>
         <div class="col-sm-10">
-            <InputText @bind-Value="model.Password" class="form-control" id="staticPassword" />
+            <InputText @bind-Value="model.Password" class="form-control" id="staticPassword" type="password"/>
             <ValidationMessage For="@(() => model.Password)" />
         </div>
     </div>
-   
+
     <div>
         <button class="btn btn-primary" type="submit">Se connecter</button>
     </div>
@@ -32,8 +34,9 @@
 @code {
     private LoginViewModel model = new();
 
-    private async void submit()
+    private void submit()
     {
+        Console.WriteLine("OK");
         Console.WriteLine(model.Email);
     }
 

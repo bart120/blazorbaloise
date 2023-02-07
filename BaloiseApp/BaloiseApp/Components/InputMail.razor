@@ -1,0 +1,57 @@
+﻿@using Microsoft.AspNetCore.Components.Forms;
+@using System.Linq.Expressions;
+
+<div class="mb-3 row">
+    <label for="staticEmail" class="col-sm-2 col-form-label">@Label</label>
+    <div class="col-sm-10">
+        <input type="email" class="form-control @valueFieldCss" id="staticEmail" @bind:get="Value" @bind:set="SetValueAsync" @attributes="Attributes" />
+        @foreach (var message in CascadedEditContext?.GetValidationMessages(valueFieldId))
+        {
+         <div class="validation-message">@message</div>   
+        }
+
+        @*@bind:set="async (value)=> await BobChanged.InvokeAsync(value)" />*@
+    </div>
+</div>
+
+@code {
+    private FieldIdentifier valueFieldId;
+    private string valueFieldCss => CascadedEditContext?.FieldCssClass(valueFieldId) ?? "";
+
+    [Parameter]
+    public Expression<Func<string>> ValueExpression { get; set; }
+
+    [CascadingParameter]
+    private EditContext? CascadedEditContext { get; set; }
+
+    [Parameter]
+    public string? Label { get; set; }
+
+    [Parameter]
+    public string? Value { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object> Attributes { get; set; } = new Dictionary<string, object>();
+
+    [Parameter]
+    public EventCallback<string> ValueChanged { get; set; }
+
+    private async Task SetValueAsync(string value)
+    {
+        Value = value;
+        await ValueChanged.InvokeAsync(Value);
+        CascadedEditContext?.NotifyFieldChanged(valueFieldId);
+    }
+
+    protected override void OnInitialized()
+    {
+        
+        valueFieldId = FieldIdentifier.Create(ValueExpression);
+        base.OnInitialized();
+    }
+
+
+
+
+
+}

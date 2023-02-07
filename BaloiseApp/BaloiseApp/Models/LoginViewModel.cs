@@ -1,15 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using BaloiseApp.Validators;
+using System.ComponentModel.DataAnnotations;
 
 namespace BaloiseApp.Models
 {
     public class LoginViewModel
     {
-        [Required]
-        [DataType(DataType.EmailAddress)]
+        [Required(ErrorMessage = "Email obligatoire")]
+        //[EmailAddress]
+        [MyEmailAddress]
         public string? Email { get; set; }
 
         [Required]
-        [DataType(DataType.Password)]
         public string? Password { get; set; }
     }
 }

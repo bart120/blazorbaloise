@@ -37,3 +37,7 @@ h1:focus {
 .invalid {
     border-color: red !important;
 }
+
+.valid {
+    border-color: green !important;
+}
