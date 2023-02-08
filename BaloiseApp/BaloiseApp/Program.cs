@@ -20,5 +20,6 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(@"https://formation.inow.fr/demo/api/v1/") });
 builder.Services.AddScoped<CarsService>();
+builder.Services.AddScoped<BrandsService>();
 
 await builder.Build().RunAsync();

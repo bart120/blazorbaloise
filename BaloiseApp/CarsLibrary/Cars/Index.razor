@@ -11,7 +11,7 @@
                 <th scope="col">Modèle</th>
                 <th scope="col">Prix</th>
                 <th scope="col">Date de circulation</th>
-                <th scope="col">Actions</th>
+                <th scope="col" colspan="2">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -21,7 +21,8 @@
                     <th scope="row">@car.Model</th>
                     <td>@car.Price</td>
                     <td>@car.DateOfCirculation.ToShortDateString()</td>
-                    <td><NavLink href="@($"cars/detail/{car.ID}?nom={car.Model}")">Voir</NavLink></td>
+                    <td><NavLink href="@($"cars/detail/{car.ID}?nom={car.Model}")" class="btn btn-secondary">Voir</NavLink></td>
+                    <td><button class="btn btn-secondary" @onclick="()=>delete(car.ID)">Suppr.</button></td>
                 </tr>
             }
         </tbody>
@@ -30,8 +31,18 @@
 
 @code {
     private List<Car>? cars;
+
+    private async void delete(int carID)
+    {
+        await serv.DeleteAsync(carID);
+        this.cars = await serv.GetAllAsync();
+        StateHasChanged();
+    }
+
     protected override async Task OnInitializedAsync()
     {
-        this.cars = await serv.getAllAsync();
+        this.cars = await serv.GetAllAsync();
     }
+
+
 }

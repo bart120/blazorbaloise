@@ -1,4 +1,4 @@
-﻿namespace BaloiseApp.Models
+﻿namespace ServicesLibrary.Models
 {
     public class Brand
     {
