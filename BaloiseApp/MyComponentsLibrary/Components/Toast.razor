@@ -1,0 +1,66 @@
+﻿@using MyComponentsLibrary.Services;
+@implements IDisposable
+
+@inject ToastService serv
+
+
+<div class="cs-toast @(isVisible ? "cs-toast-visible" : null) @bgCssClass">
+    <div class="cs-toast-icon">
+        <button type="button" class="btn-close" aria-label="Close" @onclick="hide"></button>
+    </div>
+    <div class="cs-toast-body">
+        <h5>@heading</h5>
+        <p>@message</p>
+    </div>
+</div>
+
+@code {
+    private string? heading;
+    private string? message;
+    private string? bgCssClass;
+    private bool isVisible = false;
+
+    private void show(string message, ToastLevel level)
+    {
+        switch (level)
+        {
+            case ToastLevel.Success:
+                heading = "OK";
+                bgCssClass = "bg-success";
+                break;
+            case ToastLevel.Error:
+                heading = "Erreur";
+                bgCssClass = "bg-danger";
+                break;
+            case ToastLevel.Warning:
+                heading = "Attention";
+                bgCssClass = "bg-warning";
+                break;
+            case ToastLevel.Info:
+                heading = "Erreur";
+                bgCssClass = "bg-info";
+                break;
+        }
+        this.isVisible = true;
+        this.message = message;
+        StateHasChanged();
+    }
+
+    private void hide()
+    {
+        this.isVisible = false;
+        StateHasChanged();
+    }
+
+    protected override void OnInitialized()
+    {
+        serv.OnShow += show;
+        serv.OnHide += hide;
+    }
+
+    void IDisposable.Dispose()
+    {
+        serv.OnShow -= show;
+        serv.OnHide -= hide;
+    } 
+}

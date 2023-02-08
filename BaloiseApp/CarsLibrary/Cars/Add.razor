@@ -1,74 +1,85 @@
 ﻿@page "/cars/add"
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.JSInterop;
+@using MyComponentsLibrary.Services;
 
 @inject IJSRuntime jsRuntime
 @inject BrandsService servBrands
 @inject CarsService servCars
 @inject NavigationManager nav
+@inject ToastService serv
 
 
 <h3>Ajouter une voiture</h3>
-
-<EditForm OnValidSubmit="@submit" Model="@model" novalidate>
-    <div class="mb-3 row">
-        <label for="Model" class="col-sm-2 col-form-label">Modèle</label>
-        <div class="col-sm-10">
-            <InputText @bind-Value="model.Model" class="form-control" id="Model" />
-            <ValidationMessage For="@(() => model.Model)" />
-        </div>
-    </div>
-    <div class="mb-3 row">
-        <label for="Price" class="col-sm-2 col-form-label">Prix</label>
-        <div class="col-sm-10">
-            <InputNumber @bind-Value="model.Price" class="form-control" id="Price" />
-            <ValidationMessage For="@(() => model.Price)" />
-        </div>
-    </div>
-    <div class="mb-3 row">
-        <label for="DateOfCirculation" class="col-sm-2 col-form-label">Date de mise en circulation</label>
-        <div class="col-sm-10">
-            <InputDate @bind-Value="model.DateOfCirculation" class="form-control" id="DateOfCirculation" />
-            <ValidationMessage For="@(() => model.DateOfCirculation)" />
-        </div>
-    </div>
-
-    <div class="mb-3 row">
-        <label for="Brand" class="col-sm-2 col-form-label">Marque</label>
-        <div class="col-sm-10">
-            @if(brands == null){
-                <div class="spinner-border" role="status">
-                    <span class="visually-hidden">Loading...</span>
+<ErrorBoundary @ref="errorBoundary">
+    <ChildContent>
+        <EditForm OnValidSubmit="@submit" Model="@model" novalidate>
+            <div class="mb-3 row">
+                <label for="Model" class="col-sm-2 col-form-label">Modèle</label>
+                <div class="col-sm-10">
+                    <InputText @bind-Value="model.Model" class="form-control" id="Model" />
+                    <ValidationMessage For="@(() => model.Model)" />
                 </div>
-            }else{
-                <InputSelect class="form-control form-select" @bind-Value="model.BrandID">
-                    @foreach (var b in brands)
-                    {
-                        <option value="@b.ID">@b.Name</option>
-                    }
-                </InputSelect>
-                <ValidationMessage For="@(() => model.BrandID)" />
-            }
-        </div>
-    </div>
+            </div>
+            <div class="mb-3 row">
+                <label for="Price" class="col-sm-2 col-form-label">Prix</label>
+                <div class="col-sm-10">
+                    <InputNumber @bind-Value="model.Price" class="form-control" id="Price" />
+                    <ValidationMessage For="@(() => model.Price)" />
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label for="DateOfCirculation" class="col-sm-2 col-form-label">Date de mise en circulation</label>
+                <div class="col-sm-10">
+                    <InputDate @bind-Value="model.DateOfCirculation" class="form-control" id="DateOfCirculation" />
+                    <ValidationMessage For="@(() => model.DateOfCirculation)" />
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <label for="Brand" class="col-sm-2 col-form-label">Marque</label>
+                <div class="col-sm-10">
+                    @*@if(brands == null){
+                    <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                    </div>
+                    }else{*@
+                    <InputSelect class="form-control form-select" @bind-Value="model.BrandID">
+                        @foreach (var b in brands)
+                        {
+                            <option value="@b.ID">@b.Name</option>
+                        }
+                    </InputSelect>
+                    <ValidationMessage For="@(() => model.BrandID)" />
+                    @*}*@
+                </div>
+            </div>
 
 
-    <div>
-        <button class="btn btn-primary" type="submit">Enregistrer</button>
-    </div>
-</EditForm>
-
+            <div>
+                <button class="btn btn-primary" type="submit">Enregistrer</button>
+            </div>
+        </EditForm>
+    </ChildContent>
+    <ErrorContent>
+        <p>Une erreur soft dans la page!</p>
+    </ErrorContent>
+</ErrorBoundary>
 
 @code {
+    //errors
+    private ErrorBoundary? errorBoundary;
+
     private Car model = new Car { DateOfCirculation = DateTime.Now };
     private List<Brand>? brands;
 
     private async void submit()
     {
         var car = await servCars.InsertAsync(model);
-        if(car != null)
+        if (car != null)
         {
-            await jsRuntime.InvokeVoidAsync("alert", $"Voiture ajoutée avec l'ID est: {car.ID}");
+            //await jsRuntime.InvokeVoidAsync("alert", $"Voiture ajoutée avec l'ID est: {car.ID}");
+            serv.ShowToast($"Voiture ajoutée avec l'ID est: {car.ID}", MyComponentsLibrary.ToastLevel.Success);
             nav.NavigateTo($"/cars/detail/{car.ID}");
         }
         else
@@ -80,5 +91,11 @@
     protected override async Task OnInitializedAsync()
     {
         this.brands = await servBrands.getAllAsync();
+        errorBoundary?.Recover();
     }
+
+    /*protected override void OnParametersSet()
+    {
+        errorBoundary?.Recover();
+    }*/
 }

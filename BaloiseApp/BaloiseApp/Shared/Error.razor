@@ -1,0 +1,26 @@
+﻿@if (onError)
+{
+    <div class="alert alert-danger" role="alert">
+        @errorMessage
+    </div>
+}
+<CascadingValue Value="this">
+    @ChildContent
+</CascadingValue>
+
+
+@code {
+    private bool onError = false;
+    private string errorMessage = "";
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    public void ProcessError(Exception e)
+    {
+        Console.WriteLine(e.StackTrace);
+        this.errorMessage = e.Message;
+        this.onError = true;
+        StateHasChanged();
+    }
+}

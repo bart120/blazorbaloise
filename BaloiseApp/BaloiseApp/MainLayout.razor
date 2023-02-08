@@ -1,10 +1,20 @@
 ﻿@inherits LayoutComponentBase
+@using MyComponentsLibrary.Components
 
+<Toast />
 <div class="page">
     <Menu />
     <main>
         <div class="container-fluid">
             @Body
+            @*<ErrorBoundary>
+                <ChildContent>
+                    @Body
+                </ChildContent>
+                <ErrorContent>
+                    <p>Une erreur soft au layout!</p>
+                </ErrorContent>
+            </ErrorBoundary>*@
         </div>
     </main>
 

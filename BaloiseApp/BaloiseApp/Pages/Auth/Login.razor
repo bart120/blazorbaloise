@@ -2,17 +2,18 @@
 
 @using Microsoft.AspNetCore.Components.Forms
 @using MyComponentsLibrary.Components
+@using MyComponentsLibrary.Services;
 
 <h3>Authentification</h3>
 <EditForm OnValidSubmit="@submit" Model="@model" novalidate>
     <DataAnnotationsValidator />
 
-  @* <div class="mb-3 row">
-        <label for="staticEmail" class="col-sm-2 col-form-label">Email</label>
-        <div class="col-sm-10">
-            <InputText @bind-Value="model.Email" class="form-control" id="staticEmail" />
-            <ValidationMessage For="@(() => model.Email)" />
-        </div>
+    @* <div class="mb-3 row">
+    <label for="staticEmail" class="col-sm-2 col-form-label">Email</label>
+    <div class="col-sm-10">
+    <InputText @bind-Value="model.Email" class="form-control" id="staticEmail" />
+    <ValidationMessage For="@(() => model.Email)" />
+    </div>
     </div>*@
 
     <InputMail Label="Email" @bind-Value="model.Email" style="background-color: lightblue" placeholder="Saisir votre login" />
@@ -20,7 +21,7 @@
     <div class="mb-3 row">
         <label for="staticPassword" class="col-sm-2 col-form-label">Password</label>
         <div class="col-sm-10">
-            <InputText @bind-Value="model.Password" class="form-control" id="staticPassword" type="password"/>
+            <InputText @bind-Value="model.Password" class="form-control" id="staticPassword" type="password" />
             <ValidationMessage For="@(() => model.Password)" />
         </div>
     </div>
@@ -32,13 +33,24 @@
 
 
 @code {
+    [CascadingParameter]
+    public Error? Error { get; set; }
+
     private LoginViewModel model = new();
 
     private void submit()
     {
-        Console.WriteLine("OK");
-        Console.WriteLine(model.Email);
+        try
+        {
+            Console.WriteLine("OK");
+            Console.WriteLine(model.Email);
+            throw new InvalidCastException("Erreur de test");
+        }
+        catch (Exception e)
+        {
+            Error?.ProcessError(e);
+        }
+
+
     }
-
-
 }

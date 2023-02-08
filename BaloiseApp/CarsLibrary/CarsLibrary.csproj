@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MyComponentsLibrary\MyComponentsLibrary.csproj" />
     <ProjectReference Include="..\ServicesLibrary\ServicesLibrary.csproj" />
   </ItemGroup>
 
