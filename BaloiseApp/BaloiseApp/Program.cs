@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration.Memory;
 using MyComponentsLibrary.Services;
+using Blazored.SessionStorage;
 
 var confData = new Dictionary<string, string>()
 {
@@ -23,5 +24,6 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(@"https:
 builder.Services.AddScoped<CarsService>();
 builder.Services.AddScoped<BrandsService>();
 builder.Services.AddScoped<ToastService>();
+builder.Services.AddBlazoredSessionStorageAsSingleton();
 
 await builder.Build().RunAsync();

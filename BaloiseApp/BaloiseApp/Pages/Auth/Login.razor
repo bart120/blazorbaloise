@@ -1,8 +1,11 @@
 ﻿@page "/login"
 
+@using Blazored.SessionStorage;
 @using Microsoft.AspNetCore.Components.Forms
 @using MyComponentsLibrary.Components
 @using MyComponentsLibrary.Services;
+
+@inject ISyncSessionStorageService store
 
 <h3>Authentification</h3>
 <EditForm OnValidSubmit="@submit" Model="@model" novalidate>
@@ -44,7 +47,8 @@
         {
             Console.WriteLine("OK");
             Console.WriteLine(model.Email);
-            throw new InvalidCastException("Erreur de test");
+            store.SetItem("USER", new User { FullName = "Bob Leponge" });
+            //throw new InvalidCastException("Erreur de test");
         }
         catch (Exception e)
         {

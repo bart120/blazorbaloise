@@ -1,4 +1,6 @@
-﻿@inject IConfiguration conf
+﻿@using Blazored.SessionStorage;
+@inject IConfiguration conf
+@inject ISyncSessionStorageService store
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary" style="background-color: @conf["menuBgColor"]">
     <div class="container-fluid">
@@ -19,6 +21,7 @@
                 <li class="nav-item"><NavLink class="nav-link" href="lazy">Lazy</NavLink></li>
             </ul>
             <div class="d-flex">
+                @name
                 <NavLink class="nav-link" href="login">Se connecter</NavLink>
             </div>
             
@@ -27,8 +30,22 @@
 </nav>
 
 @code {
+    private string? name;
+
     protected override Task OnInitializedAsync()
     {
+        store.Changed += (object sender, ChangedEventArgs args) =>
+        {
+            //Console.WriteLine($"KEY: {args.Key}");
+            if (args.Key == "USER"){
+                name = (args.NewValue as User)?.FullName;
+                //name = store.GetItem<User>("USER")?.FullName;
+                StateHasChanged();
+            }
+        };
+        name = store.GetItem<User>("USER")?.FullName;
+
+
         var url = conf.GetValue<string>("urlApiAuth");
         return base.OnInitializedAsync();
     }
