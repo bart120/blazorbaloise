@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration.Memory;
 using MyComponentsLibrary.Services;
 using Blazored.SessionStorage;
+using Microsoft.Extensions.DependencyInjection;
 
 var confData = new Dictionary<string, string>()
 {
@@ -25,5 +26,10 @@ builder.Services.AddScoped<CarsService>();
 builder.Services.AddScoped<BrandsService>();
 builder.Services.AddScoped<ToastService>();
 builder.Services.AddBlazoredSessionStorageAsSingleton();
+builder.Services.AddOidcAuthentication(options =>
+{
+    builder.Configuration.Bind("Authentication", options.ProviderOptions);
+});
+
 
 await builder.Build().RunAsync();

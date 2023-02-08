@@ -1,5 +1,8 @@
 ﻿@inherits LayoutComponentBase
+@using Microsoft.AspNetCore.Authorization;
 @using MyComponentsLibrary.Components
+
+@*@attribute [Authorize(Policy = "")]*@
 
 <Toast />
 <div class="page">
